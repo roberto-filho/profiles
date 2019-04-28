@@ -1,0 +1,14 @@
+{
+  "name": "json-to-sql",
+  "version": "1.0.0",
+  "description": "Reads the data json and spits out SQL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roberto Filho <roberto.w.filho@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "~3.3.2"
+  }
+}
