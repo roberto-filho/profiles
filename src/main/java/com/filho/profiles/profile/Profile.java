@@ -3,6 +3,7 @@ package com.filho.profiles.profile;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +17,8 @@ public class Profile {
     private Integer age;
     private Long heightInCm;
     private String mainPhoto;
-    private Long compatibilityScore;
+    @Column(precision = 3, scale = 2)
+    private BigDecimal compatibilityScore;
     private Integer contactsExchanged;
     private boolean favourite;
     @Enumerated(EnumType.STRING)
