@@ -1,8 +1,9 @@
 const uuid = require('uuid/v4')
 const json = require('./matches.json');
+const createTable = require('./create-table.json');
 
 const insertInstruction = 'insert into profile('
-  .concat('id,display_name,age,job_title,height_in_cm,name,lat,lon,main_photo,contacts_exchanged,favourite,religion)')
+  .concat('id,display_name,age,job_title,height_in_cm,name,lat,lon,main_photo,compatibility_score,contacts_exchanged,favourite,religion)')
   .concat(' values');
 
 const values = json.matches.map(m => {
@@ -14,7 +15,8 @@ const values = json.matches.map(m => {
     .concat(`,'${m.city.name}'`)
     .concat(`,${m.city.lat}`)
     .concat(`,${m.city.lon}`)
-    .concat(`,'${m.main_photo}'`)
+    .concat(','+(m.main_photo ? `'${m.main_photo}'` : 'null'))
+    .concat(`,${m.compatibility_score}`)
     .concat(`,${m.contacts_exchanged}`)
     .concat(`,${m.favourite}`)
     .concat(`,'${m.religion}')`);
@@ -22,4 +24,4 @@ const values = json.matches.map(m => {
   return out;
 });
 
-process.stdout.write(insertInstruction+'\n'+values.join(',\n'));
+process.stdout.write(createTable.sql+'\n'+insertInstruction+'\n'+values.join(',\n'));

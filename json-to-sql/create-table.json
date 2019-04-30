@@ -1,0 +1,3 @@
+{
+  "sql": "CREATE TABLE profile( id UUID NOT NULL, age INT4, lat NUMERIC(12, 8), lon NUMERIC(12, 8), NAME VARCHAR(255), compatibility_score NUMERIC(3, 2), contacts_exchanged INT4, display_name VARCHAR(255), favourite BOOLEAN NOT NULL, height_in_cm INT8, job_title VARCHAR(255), main_photo VARCHAR(255), religion VARCHAR(255), PRIMARY KEY (id));"
+}
