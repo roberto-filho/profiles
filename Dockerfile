@@ -2,7 +2,7 @@ FROM openjdk:8u201-jdk-alpine as builder
 
 COPY . /app
 WORKDIR /app
-RUN ./gradlew build -x test --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
 FROM openjdk:8u201-jre-alpine
 EXPOSE 8081
