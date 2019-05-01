@@ -5,7 +5,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomizedRestMvcConfiguration implements RepositoryRestConfigurer {
+public class RestMvcConfiguration implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {

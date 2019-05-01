@@ -1,6 +1,9 @@
 package com.filho.profiles.profile;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,9 +11,12 @@ import java.util.UUID;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Profile {
 
-    @Id
+    @Id @GeneratedValue @Builder.Default
     private UUID id = UUID.randomUUID();
     private String displayName;
     private String jobTitle;
