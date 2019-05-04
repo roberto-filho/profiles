@@ -43,7 +43,6 @@ public class ProfilesControllerTest {
 
         mvc.perform(get("/api/profiles?page=0&photo=false"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$._embedded.profiles[0].displayName", is("BobTheBuilderWithoutPicture")))
-        ;
+                .andExpect(jsonPath("$._embedded.profiles[0].displayName", is("BobTheBuilderWithoutPicture")));
     }
 }

@@ -1,7 +1,9 @@
 package com.filho.profiles.profile.data;
 
 import com.filho.profiles.dto.ProfileFilter;
+import com.filho.profiles.profile.City;
 import com.filho.profiles.profile.Profile;
+import com.filho.util.LoggedInUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.filho.profiles.profile.data.ProfileSpecifications.*;
 
 @Repository
 public class ProfileRepositoryExt {
@@ -32,15 +36,29 @@ public class ProfileRepositoryExt {
         List<Specification<Profile>> specs = new ArrayList<>();
 
         if (filter.getHasPhoto() != null) {
-            specs.add(ProfileSpecifications.hasPhoto(filter.getHasPhoto()));
+            specs.add(hasPhoto(filter.getHasPhoto()));
+        }
+
+        if (filter.getHasContact() != null) {
+            specs.add(hasContacts(filter.getHasContact()));
+        }
+
+        if (filter.getDistanceRadiusInKm() != null) {
+            final City city = LoggedInUser.getInstance().getCity();
+
+            specs.add(isInKmRange(
+                    filter.getDistanceRadiusInKm(),
+                    city.getLat(),
+                    city.getLon()
+            ));
         }
 
         return specs
                 .stream()
-                .reduce(emptySpec(), Specification::and);
+                .reduce(emptySpecification(), Specification::and);
     }
 
-    private Specification<Profile> emptySpec() {
+    private Specification<Profile> emptySpecification() {
         return Specification.where(null);
     }
 

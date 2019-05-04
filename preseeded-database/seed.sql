@@ -1,3 +1,12 @@
+create extension earthdistance cascade;
+
+-- https://wiki.postgresql.org/wiki/Distance_in_km
+create or replace function distance_in_km (numeric,numeric,numeric,numeric) returns numeric
+    AS $$ select ROUND(( ('('||$1||', '||$2||')')::point <@> ('('||$3||', '||$4||')')::point )::NUMERIC * 1.609344) $$
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
 CREATE TABLE profile( id UUID NOT NULL, age INT4, lat NUMERIC(12, 8), lon NUMERIC(12, 8), NAME VARCHAR(255), compatibility_score NUMERIC(3, 2), contacts_exchanged INT4, display_name VARCHAR(255), favourite BOOLEAN NOT NULL, height_in_cm INT8, job_title VARCHAR(255), main_photo VARCHAR(255), religion VARCHAR(255), PRIMARY KEY (id));
 insert into profile(id,display_name,age,job_title,height_in_cm,name,lat,lon,main_photo,compatibility_score,contacts_exchanged,favourite,religion) values
 ('868d1f15-a787-4eb4-a36d-d79182fd9383','Caroline',41,'Corporate Lawyer',153,'Leeds',53.801277,-1.548567,'http://thecatapi.com/api/images/get?format=src&type=gif',0.76,2,true,'Atheist'),

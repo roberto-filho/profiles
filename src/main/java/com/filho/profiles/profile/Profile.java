@@ -32,4 +32,12 @@ public class Profile {
 
     @Embedded
     private City city;
+
+    public boolean hasContacts() {
+        return contactsExchanged != null && contactsExchanged > 0;
+    }
+
+    public boolean hasNoContacts() {
+        return !hasContacts();
+    }
 }

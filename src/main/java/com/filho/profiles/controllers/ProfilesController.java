@@ -32,7 +32,7 @@ public class ProfilesController {
             @RequestParam(value = "distance", required = false) final String distance,
             final Pageable pagination) {
 
-        ProfileFilter filter = toFilter(
+        ProfileFilter filter = ProfileFilter.fromRequestParams(
                 hasPhoto,
                 hasContact,
                 isFavorite,
@@ -43,31 +43,6 @@ public class ProfilesController {
 
         final Page<Profile> searchResults = repository.findByCriteria(filter, pagination);
         return assembler.toResource(searchResults);
-    }
-
-    /**
-     *
-     * @param hasPhoto
-     * @param hasContact
-     * @param isFavorite
-     * @param compatibilityScoreRange
-     * @param heightRange
-     * @param distance
-     * @return
-     */
-    private ProfileFilter toFilter(
-            Boolean hasPhoto,
-            Boolean hasContact,
-            Boolean isFavorite,
-            String compatibilityScoreRange,
-            String heightRange,
-            String distance) {
-        final ProfileFilter.ProfileFilterBuilder builder = ProfileFilter.builder()
-                .hasPhoto(hasPhoto)
-                .hasContact(hasContact)
-                .isFavorite(isFavorite);
-
-        return builder.build();
     }
 
 }
