@@ -41,6 +41,29 @@ public class ParameterValidatorTest {
         runHeightValidation("[135,300]");
     }
 
+    @Test
+    public void shouldGenerateMessageIfDistanceIsBelow30() {
+        runDistanceValidation("29");
+    }
+
+    @Test
+    public void shouldGenerateMessageIfDistanceIsAbove300() {
+        runDistanceValidation("301");
+    }
+
+    private void runDistanceValidation(String distance) {
+        final List<ParameterValidationMessage> parameterValidationMessages = validator
+                .validateParams(
+                        null,
+                        null,
+                        null,
+                        distance);
+
+        assertThat(parameterValidationMessages)
+                .hasSize(1)
+                .allMatch(message -> message.getParameter().equals("distance"));
+    }
+
     private void runHeightValidation(String heightRange) {
         final List<ParameterValidationMessage> parameterValidationMessages = validator
                 .validateParams(

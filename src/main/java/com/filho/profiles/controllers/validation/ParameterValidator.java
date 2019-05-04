@@ -7,15 +7,16 @@ import org.springframework.data.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Validates the parameters sent through the API that need validation: "compatScore", "age", "height", "distance".
+ */
 public class ParameterValidator {
 
     private List<ParameterValidationMessage> validationMessages = new ArrayList<>();
 
     public List<ParameterValidationMessage> validateParams(String compatibilityScoreRange, String ageRange, String heightRange, String distance) {
-
-
         if (compatibilityScoreRange != null) {
-            rangeValidation(
+            validateRange(
                     compatibilityScoreRange,
                     1,
                     99,
@@ -24,7 +25,7 @@ public class ParameterValidator {
         }
 
         if (ageRange != null) {
-            rangeValidation(
+            validateRange(
                     ageRange,
                     18,
                     95,
@@ -33,22 +34,43 @@ public class ParameterValidator {
         }
 
         if (heightRange != null) {
-            rangeValidation(
+            validateRange(
                     heightRange,
                     135,
                     210,
                     "height",
-                    "Invalid height range. Valida range is from 135cm to 210 cm."
+                    "Invalid height range. Valid range is from 135cm to 210 cm."
             );
+        }
+
+        if (distance != null ) {
+            Integer parsedDistance = parseInt(distance);
+            if (parsedDistance == null || parsedDistance.intValue() < 30 || parsedDistance.intValue() > 300) {
+                final ParameterValidationMessage message = new ParameterValidationMessage(
+                        "distance",
+                        "Invalid distance. Valid distance is between 30 and 300."
+                );
+
+                validationMessages.add(message);
+            }
         }
 
         return validationMessages;
     }
 
-    private void rangeValidation(String range, int minimum, int maximum, String field, String validationMessage) {
+    private Integer parseInt(String integer) {
+        try {
+            return Integer.parseInt(integer);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+
+    private void validateRange(String range, int minimum, int maximum, String field, String validationMessage) {
         final Pair<Integer, Integer> age = RangeUtil.parseRange(range);
 
-        if (age.getFirst() < minimum || age.getSecond() > maximum) {
+        if (age.getFirst().intValue() < minimum || age.getSecond().intValue() > maximum) {
             final ParameterValidationMessage message = new ParameterValidationMessage(
                     field,
                     validationMessage
