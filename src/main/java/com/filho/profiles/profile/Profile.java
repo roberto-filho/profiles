@@ -26,7 +26,7 @@ public class Profile {
     @Column(precision = 3, scale = 2)
     private BigDecimal compatibilityScore;
     private Integer contactsExchanged;
-    private boolean favourite;
+    private boolean favourite; // Using Boolean wrapper class makes no sense in this context
     @Enumerated(EnumType.STRING)
     private Religion religion;
 

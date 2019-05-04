@@ -13,12 +13,39 @@ import java.math.BigDecimal;
 public class ProfileSpecifications {
 
     /**
+     * Builds an expression that will filter profiles based on their 'favorite' property.
+     * @param filterFavorites should filter favorites or not favorites
+     * @return the expression.
+     */
+    public static Specification<Profile> isFavorite(boolean filterFavorites) {
+        return (root, query, criteriaBuilder) -> {
+            final Path<Boolean> favorite = root.get("favourite");
+
+            if (filterFavorites) {
+                return criteriaBuilder.and(
+                        favorite.isNotNull(),
+                        criteriaBuilder.isTrue(favorite)
+                );
+            }
+
+            return criteriaBuilder.or(
+                    // you never know when your database will have null booleans: even when it shouldn't
+                    favorite.isNull(),
+                    criteriaBuilder.isFalse(favorite)
+            );
+        };
+    }
+
+    /**
      * Builds a expression that checks if a profile has a photo on his profile or not.
      * @param hasPhoto if the expression should filter records that have profile pictures or not.
      * @return the specification.
      */
     public static Specification<Profile> hasPhoto(boolean hasPhoto) {
-        return hasProperty("mainPhoto", hasPhoto);
+        return (root, query, criteriaBuilder) ->
+                hasPhoto
+                        ? root.get("mainPhoto").isNotNull()
+                        : root.get("mainPhoto").isNull();
     }
 
     /**
@@ -44,22 +71,17 @@ public class ProfileSpecifications {
         };
     }
 
-    private static Specification<Profile> hasProperty(String property, boolean shouldHave) {
-        return (root, query, criteriaBuilder) ->
-                shouldHave
-                ? root.get(property).isNotNull()
-                : root.get(property).isNull();
-    }
-
     /**
-     *
-     * @param kmRange
-     * @param baseLatitude
-     * @param baseLongitude
-     * @return
+     * Builds an expression that filters profiles based on their distance from a central point by calling
+     * a custom database function.
+     * The distance from the central point is calculated based on the profile's "city" property.
+     * @param kmRange       the maximum distance from the central point.
+     * @param baseLatitude  the central point's latitude.
+     * @param baseLongitude the central point's longitude.
+     * @return the expression.
      */
     public static Specification<Profile> isInKmRange(int kmRange, BigDecimal baseLatitude, BigDecimal baseLongitude) {
-        return (Specification<Profile>) (root, query, criteriaBuilder) -> {
+        return (root, query, criteriaBuilder) -> {
 
             final Expression<BigDecimal> distanceInKm = criteriaBuilder
                     .function("distance_in_km",

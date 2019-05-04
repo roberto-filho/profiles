@@ -2,13 +2,10 @@ package com.filho.profiles.profile.data;
 
 import com.filho.profiles.dto.ProfileFilter;
 import com.filho.profiles.profile.Profile;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -17,21 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class IsContactIntegrationTest {
-
-    private static final PageRequest PAGE_REQUEST = PageRequest.of(0, 25);
-
-    @Autowired
-    ProfileRepository repository;
-
-    @Autowired
-    ProfileRepositoryExt repositoryExt;
-
-    @Before
-    public void setUp() {
-        repository.deleteAll();
-        createProfilesWithContactAndWithoutContacts();
-    }
+public class IsContactIntegrationTest extends AbstractProfileRepositoryIntegrationTest {
 
     @Test
     public void shouldFindProfileWithContactsWhenIsContactIsTrue() {
@@ -39,7 +22,7 @@ public class IsContactIntegrationTest {
                 .hasContact(true)
                 .build();
 
-        final Page<Profile> queryResults = repositoryExt.findByCriteria(filter, PAGE_REQUEST);
+        final Page<Profile> queryResults = getProfileRepositoryExt().findByCriteria(filter, PAGE_REQUEST);
 
         assertThat(queryResults)
                 .hasSize(1)
@@ -52,14 +35,14 @@ public class IsContactIntegrationTest {
                 .hasContact(false)
                 .build();
 
-        final Page<Profile> queryResults = repositoryExt.findByCriteria(filter, PAGE_REQUEST);
+        final Page<Profile> queryResults = getProfileRepositoryExt().findByCriteria(filter, PAGE_REQUEST);
 
         assertThat(queryResults)
                 .hasSize(2)
                 .allMatch(Profile::hasNoContacts);
     }
 
-    private void createProfilesWithContactAndWithoutContacts() {
+    private void createProfilesWithContactAndWithoutContacts(ProfileRepository repository) {
         final Profile withContacts = Profile.builder()
                 .displayName("I have contacts")
                 .contactsExchanged(3)
@@ -76,5 +59,10 @@ public class IsContactIntegrationTest {
                 .build();
 
         repository.saveAll(Arrays.asList(withContacts, withNoContacts, withNullContacts));
+    }
+
+    @Override
+    protected void createDataForTest(ProfileRepository repository) {
+        createProfilesWithContactAndWithoutContacts(repository);
     }
 }

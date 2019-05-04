@@ -43,6 +43,10 @@ public class ProfileRepositoryExt {
             specs.add(hasContacts(filter.getHasContact()));
         }
 
+        if (filter.getIsFavorite() != null) {
+            specs.add(isFavorite(filter.getIsFavorite()));
+        }
+
         if (filter.getDistanceRadiusInKm() != null) {
             final City city = LoggedInUser.getInstance().getCity();
 

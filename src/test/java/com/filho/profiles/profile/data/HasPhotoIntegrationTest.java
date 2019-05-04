@@ -18,22 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class HasPhotoIntegrationTest {
+public class HasPhotoIntegrationTest extends AbstractProfileRepositoryIntegrationTest {
 
-    private static final PageRequest PAGE_REQUEST = PageRequest.of(0, 25);
-
-    @Autowired
-    ProfileRepository repository;
-
-    @Autowired
-    ProfileRepositoryExt repositoryExt;
-
-    @Before
-    public void setUp() {
-        repository.deleteAll();
+    @Override
+    protected void createDataForTest(ProfileRepository repository) {
+        createProfileWithPhotoAndProfileWithoutPhoto(repository);
     }
 
-    private void createProfileWithPhotoAndProfileWithoutPhoto() {
+    private void createProfileWithPhotoAndProfileWithoutPhoto(ProfileRepository repository) {
         final Profile withPhoto = Profile.builder()
                 .displayName("I have a picture")
                 .mainPhoto("https://picsum.photos/200")
@@ -47,11 +39,9 @@ public class HasPhotoIntegrationTest {
 
     @Test
     public void shouldFindProfileWithPhotosWhenHasPhotoIsTrue() {
-        createProfileWithPhotoAndProfileWithoutPhoto();
-
         final ProfileFilter filter = ProfileFilter.builder().hasPhoto(true).build();
 
-        Page<Profile> queryResults = repositoryExt.findByCriteria(filter, PageRequest.of(0, 25));
+        Page<Profile> queryResults = getProfileRepositoryExt().findByCriteria(filter, PageRequest.of(0, 25));
 
         assertThat(queryResults)
                 .hasSize(1)
@@ -60,11 +50,9 @@ public class HasPhotoIntegrationTest {
 
     @Test
     public void shouldFindProfilesWithNoPhotoWhenHasPhotoIsFalse() {
-        createProfileWithPhotoAndProfileWithoutPhoto();
-
         final ProfileFilter filter = ProfileFilter.builder().hasPhoto(false).build();
 
-        Page<Profile> queryResults = repositoryExt.findByCriteria(filter, PAGE_REQUEST);
+        Page<Profile> queryResults = getProfileRepositoryExt().findByCriteria(filter, PAGE_REQUEST);
 
         assertThat(queryResults)
                 .hasSize(1)
