@@ -13,6 +13,35 @@ import java.math.BigDecimal;
 public class ProfileSpecifications {
 
     /**
+     * Builds an expression that filters profiles whose compatibility score is contained in an inclusive range.
+     * Note: the range is from 0 to 100.
+     * @param minimum the lower bound.
+     * @param maximum the upper bound.
+     * @return the expression.
+     */
+    public static Specification<Profile> isCompatilityInRange(int minimum, int maximum) {
+        return (root, query, criteriaBuilder) -> {
+            final Path<Number> compatibilityScore = root.get("compatibilityScore");
+
+            System.out.println("min "+minimum+", max "+maximum);
+            final BigDecimal decimalMinimum = toDecimal(minimum);
+            final BigDecimal decimalMaximum = toDecimal(maximum);
+
+            return criteriaBuilder.and(
+                    compatibilityScore.isNotNull(),
+                    criteriaBuilder.ge(compatibilityScore, decimalMinimum),
+                    criteriaBuilder.le(compatibilityScore, decimalMaximum)
+            );
+        };
+    }
+
+    private static BigDecimal toDecimal(int minimum) {
+        return BigDecimal.valueOf(minimum)
+                .divide(BigDecimal.valueOf(100))
+                .setScale(2, BigDecimal.ROUND_DOWN);
+    }
+
+    /**
      * Builds an expression that will filter profiles based on their 'favorite' property.
      * @param filterFavorites should filter favorites or not favorites
      * @return the expression.

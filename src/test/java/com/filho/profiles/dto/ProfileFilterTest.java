@@ -16,6 +16,7 @@ public class ProfileFilterTest {
                 null,
                 compatRange,
                 null,
+                null,
                 null);
 
         Assertions.assertThat(profileFilter)
@@ -32,9 +33,27 @@ public class ProfileFilterTest {
                 null,
                 compatRange,
                 null,
+                null,
                 null);
 
         Assertions.assertThat(profileFilter)
                 .hasFieldOrPropertyWithValue("compatibilityScoreRange", null);
+    }
+
+    @Test
+    public void shouldOrderCompatibilityRangeValuesByHighestToLowest() {
+        String compatRange = "[70,30]";
+
+        final ProfileFilter profileFilter = ProfileFilter.fromRequestParams(
+                null,
+                null,
+                null,
+                compatRange,
+                null,
+                null,
+                null);
+
+        Assertions.assertThat(profileFilter)
+                .hasFieldOrPropertyWithValue("compatibilityScoreRange", Pair.of(30, 70));
     }
 }

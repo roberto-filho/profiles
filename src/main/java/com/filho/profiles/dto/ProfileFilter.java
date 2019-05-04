@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.util.Pair;
 
+import static com.filho.util.RangeUtil.parseRange;
+
 @Data
 @Builder
 public class ProfileFilter {
@@ -12,16 +14,17 @@ public class ProfileFilter {
     private Boolean isFavorite;
     private Pair<Integer, Integer> compatibilityScoreRange;
     private Pair<Integer, Integer> heightRange;
+    private Pair<Integer, Integer> ageRange;
     private Integer distanceRadiusInKm;
 
     /**
-     *
-     * @param hasPhoto
-     * @param hasContact
-     * @param isFavorite
-     * @param compatibilityScoreRange
-     * @param heightRange
-     * @param distance
+     * Creates an object of filters from request parameters.
+     * @param hasPhoto                the "photos" parameter.
+     * @param hasContact              the "contact" parameter.
+     * @param isFavorite              the "favorite" parameter.
+     * @param compatibilityScoreRange the "compatScore" parameter.
+     * @param heightRange             the "height" parameter.
+     * @param distance                the "distance" parameter.
      * @return
      */
     public static ProfileFilter fromRequestParams(
@@ -29,6 +32,7 @@ public class ProfileFilter {
             Boolean hasContact,
             Boolean isFavorite,
             String compatibilityScoreRange,
+            String ageRange,
             String heightRange,
             String distance) {
 
@@ -43,6 +47,9 @@ public class ProfileFilter {
         if (compatibilityScoreRange != null) {
             builder.compatibilityScoreRange(parseRange(compatibilityScoreRange));
         }
+        if (ageRange != null) {
+            builder.ageRange(parseRange(ageRange));
+        }
         if (heightRange != null) {
             builder.heightRange(parseRange(heightRange));
         }
@@ -50,16 +57,5 @@ public class ProfileFilter {
         return builder.build();
     }
 
-    private static Pair<Integer, Integer> parseRange(String range) {
-        final String[] values = range
-                .replace("[", "")
-                .replace("]", "")
-                .split(",");
 
-        try {
-            return Pair.of(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
 }

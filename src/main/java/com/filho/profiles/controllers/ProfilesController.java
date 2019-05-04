@@ -1,48 +1,59 @@
 package com.filho.profiles.controllers;
 
-import com.filho.profiles.dto.ProfileFilter;
+import com.filho.profiles.controllers.validation.ParameterValidator;
+import com.filho.profiles.dto.ParameterValidationMessage;
 import com.filho.profiles.profile.Profile;
-import com.filho.profiles.profile.data.ProfileRepositoryExt;
+import com.filho.profiles.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController("/profiles")
 public class ProfilesController {
 
-    @Autowired
-    PagedResourcesAssembler<Profile> assembler;
+    private ProfileService service;
 
     @Autowired
-    ProfileRepositoryExt repository;
+    public ProfilesController(ProfileService service) {
+        this.service = service;
+    }
 
     @GetMapping
-    public Resources<Resource<Profile>> findProfiles(
+    public ResponseEntity findProfiles(
             @RequestParam(value = "photo", required = false) final Boolean hasPhoto,
             @RequestParam(value = "contact", required = false) final Boolean hasContact,
             @RequestParam(value = "favorite", required = false) final Boolean isFavorite,
             @RequestParam(value = "compatScore", required = false) final String compatibilityScoreRange,
+            @RequestParam(value = "age", required = false) final String ageRange,
             @RequestParam(value = "height", required = false) final String heightRange,
             @RequestParam(value = "distance", required = false) final String distance,
             final Pageable pagination) {
 
-        ProfileFilter filter = ProfileFilter.fromRequestParams(
-                hasPhoto,
-                hasContact,
-                isFavorite,
-                compatibilityScoreRange,
-                heightRange,
-                distance
-        );
+        ParameterValidator validator = new ParameterValidator();
 
-        final Page<Profile> searchResults = repository.findByCriteria(filter, pagination);
-        return assembler.toResource(searchResults);
+        final List<ParameterValidationMessage> validationMessages =
+                validator.validateParams(compatibilityScoreRange, ageRange, heightRange, distance);
+
+        if (validationMessages.size() > 0) {
+            return ResponseEntity.unprocessableEntity().body(validationMessages);
+        }
+
+        return ResponseEntity
+                .ok(service.findByCriteria(
+                        hasPhoto,
+                        hasContact,
+                        isFavorite,
+                        compatibilityScoreRange,
+                        ageRange,
+                        heightRange,
+                        distance,
+                        pagination));
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -45,6 +46,16 @@ public class ProfileRepositoryExt {
 
         if (filter.getIsFavorite() != null) {
             specs.add(isFavorite(filter.getIsFavorite()));
+        }
+
+        final Pair<Integer, Integer> compatRange = filter.getCompatibilityScoreRange();
+        if (compatRange != null) {
+            specs.add(isCompatilityInRange(compatRange.getFirst(), compatRange.getSecond()));
+        }
+
+        final Pair<Integer, Integer> ageRange = filter.getAgeRange();
+        if (ageRange != null) {
+            // TODO
         }
 
         if (filter.getDistanceRadiusInKm() != null) {
