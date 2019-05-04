@@ -2,10 +2,8 @@ package com.filho.profiles.controllers;
 
 import com.filho.profiles.controllers.validation.ParameterValidator;
 import com.filho.profiles.dto.ParameterValidationMessage;
-import com.filho.profiles.profile.Profile;
 import com.filho.profiles.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +43,7 @@ public class ProfilesController {
         }
 
         return ResponseEntity
-                .ok(service.findByCriteria(
+                .ok(service.findProfiles(
                         hasPhoto,
                         hasContact,
                         isFavorite,

@@ -13,6 +13,24 @@ import java.math.BigDecimal;
 public class ProfileSpecifications {
 
     /**
+     * Builds an expression that filters profiles that have "age" withing a given range.
+     * @param minimum the lower bound.
+     * @param maximum the upper bound.
+     * @return
+     */
+    public static Specification<Profile> isAgeInRange(int minimum, int maximum) {
+        return (root, query, criteriaBuilder) -> {
+            final Path<Number> compatibilityScore = root.get("age");
+
+            return criteriaBuilder.and(
+                    compatibilityScore.isNotNull(),
+                    criteriaBuilder.ge(compatibilityScore, minimum),
+                    criteriaBuilder.le(compatibilityScore, maximum)
+            );
+        };
+    }
+
+    /**
      * Builds an expression that filters profiles whose compatibility score is contained in an inclusive range.
      * Note: the range is from 0 to 100.
      * @param minimum the lower bound.
@@ -23,7 +41,6 @@ public class ProfileSpecifications {
         return (root, query, criteriaBuilder) -> {
             final Path<Number> compatibilityScore = root.get("compatibilityScore");
 
-            System.out.println("min "+minimum+", max "+maximum);
             final BigDecimal decimalMinimum = toDecimal(minimum);
             final BigDecimal decimalMaximum = toDecimal(maximum);
 

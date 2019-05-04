@@ -18,7 +18,19 @@ public class ProfileService {
         this.repositoryExt = repositoryExt;
     }
 
-    public Page<Profile> findByCriteria(
+    /**
+     * Searches for profiles using the given filters.
+     * @param hasPhoto                if a profile has photo or not.
+     * @param hasContact              if the profile has exchanged contacts or not.
+     * @param isFavorite              filters profiles that are favorites or not.
+     * @param compatibilityScoreRange range for filtering by compatibility score.
+     * @param ageRange                range for filtering by age.
+     * @param heightRange             range for filtering by height.
+     * @param distance                filters by this distance from the logged in user.
+     * @param pagination              pagination information.
+     * @return
+     */
+    public Page<Profile> findProfiles(
             Boolean hasPhoto,
             Boolean hasContact,
             Boolean isFavorite,

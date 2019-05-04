@@ -55,7 +55,7 @@ public class ProfileRepositoryExt {
 
         final Pair<Integer, Integer> ageRange = filter.getAgeRange();
         if (ageRange != null) {
-            // TODO
+            specs.add(isAgeInRange(ageRange.getFirst(), ageRange.getSecond()));
         }
 
         if (filter.getDistanceRadiusInKm() != null) {
