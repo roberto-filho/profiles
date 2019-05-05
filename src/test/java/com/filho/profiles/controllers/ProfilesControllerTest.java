@@ -2,6 +2,7 @@ package com.filho.profiles.controllers;
 
 import com.filho.profiles.profile.Profile;
 import com.filho.profiles.profile.data.ProfileRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public class ProfilesControllerTest {
     @Autowired
     private ProfileRepository repository;
 
+    @Before
+    public void setUp() {
+        repository.deleteAll();
+    }
+
     @Test
     public void shouldFilterProfilesWithNoMainPhotoWhenUsingPhotoQueryParam() throws Exception {
         final Profile withPhoto = Profile.builder()
@@ -45,4 +51,5 @@ public class ProfilesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].displayName", is("BobTheBuilderWithoutPicture")));
     }
+
 }

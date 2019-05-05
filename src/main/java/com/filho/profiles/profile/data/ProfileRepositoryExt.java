@@ -58,6 +58,11 @@ public class ProfileRepositoryExt {
             specs.add(isAgeInRange(ageRange.getFirst(), ageRange.getSecond()));
         }
 
+        final Pair<Integer, Integer> heightRange = filter.getHeightRange();
+        if (heightRange != null) {
+            specs.add(isHeightInRange(heightRange.getFirst(), heightRange.getSecond()));
+        }
+
         if (filter.getDistanceRadiusInKm() != null) {
             final City city = LoggedInUser.getInstance().getCity();
 

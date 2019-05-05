@@ -13,21 +13,23 @@ import java.math.BigDecimal;
 public class ProfileSpecifications {
 
     /**
+     * Builds an expression that filters profiles that have "height" withing a given range.
+     * @param minimum the lower bound.
+     * @param maximum the upper bound.
+     * @return
+     */
+    public static Specification<Profile> isHeightInRange(int minimum, int maximum) {
+        return isInRange("heightInCm", minimum, maximum);
+    }
+
+    /**
      * Builds an expression that filters profiles that have "age" withing a given range.
      * @param minimum the lower bound.
      * @param maximum the upper bound.
      * @return
      */
     public static Specification<Profile> isAgeInRange(int minimum, int maximum) {
-        return (root, query, criteriaBuilder) -> {
-            final Path<Number> compatibilityScore = root.get("age");
-
-            return criteriaBuilder.and(
-                    compatibilityScore.isNotNull(),
-                    criteriaBuilder.ge(compatibilityScore, minimum),
-                    criteriaBuilder.le(compatibilityScore, maximum)
-            );
-        };
+        return isInRange("age", minimum, maximum);
     }
 
     /**
@@ -38,24 +40,29 @@ public class ProfileSpecifications {
      * @return the expression.
      */
     public static Specification<Profile> isCompatilityInRange(int minimum, int maximum) {
-        return (root, query, criteriaBuilder) -> {
-            final Path<Number> compatibilityScore = root.get("compatibilityScore");
+        // Calculate the real value
+        final BigDecimal decimalMinimum = toDecimal(minimum);
+        final BigDecimal decimalMaximum = toDecimal(maximum);
 
-            final BigDecimal decimalMinimum = toDecimal(minimum);
-            final BigDecimal decimalMaximum = toDecimal(maximum);
-
-            return criteriaBuilder.and(
-                    compatibilityScore.isNotNull(),
-                    criteriaBuilder.ge(compatibilityScore, decimalMinimum),
-                    criteriaBuilder.le(compatibilityScore, decimalMaximum)
-            );
-        };
+        return isInRange("compatibilityScore", decimalMinimum.doubleValue(), decimalMaximum.doubleValue());
     }
 
     private static BigDecimal toDecimal(int minimum) {
         return BigDecimal.valueOf(minimum)
                 .divide(BigDecimal.valueOf(100))
                 .setScale(2, BigDecimal.ROUND_DOWN);
+    }
+
+    private static Specification<Profile> isInRange(String property, double minimum, double maximum) {
+        return (root, query, criteriaBuilder) -> {
+            final Path<Number> field = root.get(property);
+
+            return criteriaBuilder.and(
+                    field.isNotNull(),
+                    criteriaBuilder.ge(field, minimum),
+                    criteriaBuilder.le(field, maximum)
+            );
+        };
     }
 
     /**
