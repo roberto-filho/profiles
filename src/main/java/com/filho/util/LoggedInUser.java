@@ -17,10 +17,14 @@ public class LoggedInUser {
 
     private static void create() {
         final City city = City.builder()
-                .lat(BigDecimal.valueOf(52.412811)) // Solihull
+                .lat(BigDecimal.valueOf(52.412811))
                 .lon(BigDecimal.valueOf(-1.778197))
+                .name("Solihull")
                 .build();
         loggedInUser =
-                Profile.builder().city(city).build();
+                Profile.builder()
+                        .city(city)
+                        .displayName("Daniel Kent")
+                        .build();
     }
 }
