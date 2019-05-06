@@ -7,7 +7,7 @@ Backend service that serves a RESTful API that filters profiles based on some pr
 It was built using *Spring Boot* and uses a PostgreSQL database to pull the records from.
 
 Both the Java application and the database have Dockerfiles that can be used to build images.
-A `docker-compose.yaml` has also been provided to make it easier to run both the service and the database at the same time.
+A `docker-compose.yaml` (located in the folder _docker-compose_) has also been provided to make it easier to run all services (frontend, service, database) at the same time.
 
 ## Instructions
 
@@ -17,10 +17,18 @@ First, build the images (you can change the image tags):
 Now the service image (this will take longer):
 > $ docker build -t robertofilho/profiles .
 
-After both images have been built:
-> docker-compose up -d
+And also the frontend:
+```bash
+$ cd ../profiles-frontend
+$ docker build -t robertofilho/matches .
+```
 
-The compose tool will create 2 containers and start the application on port 8081.
+After both images have been built:
+> cd docker-compose && docker-compose up -d
+
+The compose tool will create 3 containers and start the application on port 8081.
 
 Test if everything worked out:
 > $ curl http://localhost:8081/api/profiles
+
+And then you can just access the frontend on your browser: http://localhost

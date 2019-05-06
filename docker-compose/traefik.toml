@@ -1,0 +1,20 @@
+defaultEntryPoints = ["http"]
+logLevel = "DEBUG"
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.api]
+  address = ":8080"
+    [entryPoints.api.auth]
+      [entryPoints.api.auth.basic]
+        users = [
+          "filho:$apr1$tbX9PtEI$djw.4rYcfLoiOp2VutWBY0"
+        ]
+
+[api]
+entrypoint="api"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+exposedByDefault = false
+watch = true
