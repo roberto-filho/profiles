@@ -23,7 +23,7 @@ $ cd ../profiles-frontend
 $ docker build -t robertofilho/matches .
 ```
 
-After both images have been built:
+After both images have been built, it's time to start the docker compose recipe. Run at the root of the project:
 > cd docker-compose && docker-compose up -d
 
 The compose tool will create 3 containers and start the application on port 8081.
