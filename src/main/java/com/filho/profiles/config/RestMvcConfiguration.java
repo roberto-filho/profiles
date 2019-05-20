@@ -1,14 +1,15 @@
 package com.filho.profiles.config;
 
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RestMvcConfiguration implements RepositoryRestConfigurer {
+public class RestMvcConfiguration {
 
-    @Override
-    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        config.setBasePath("/api");
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
+        return factory -> factory.setContextPath("/api");
     }
 }

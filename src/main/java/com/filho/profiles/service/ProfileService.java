@@ -2,21 +2,21 @@ package com.filho.profiles.service;
 
 import com.filho.profiles.dto.ProfileFilter;
 import com.filho.profiles.profile.Profile;
+import com.filho.profiles.profile.data.ProfileRepository;
 import com.filho.profiles.profile.data.ProfileRepositoryExt;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
 
-    private ProfileRepositoryExt repositoryExt;
-
-    @Autowired
-    public ProfileService(ProfileRepositoryExt repositoryExt) {
-        this.repositoryExt = repositoryExt;
-    }
+    private final ProfileRepositoryExt repositoryExt;
+    private final ProfileRepository repository;
 
     /**
      * Searches for profiles using the given filters.
@@ -51,5 +51,13 @@ public class ProfileService {
         );
 
         return repositoryExt.findByCriteria(filter, pagination);
+    }
+
+    /**
+     * Gets the list of religions used from the records in the database.
+     * @return a list with the religions.
+     */
+    public List<String> findDistinctReligions() {
+        return repository.findDistinctReligions();
     }
 }

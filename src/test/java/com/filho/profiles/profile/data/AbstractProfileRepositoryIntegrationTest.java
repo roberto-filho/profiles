@@ -16,7 +16,7 @@ public abstract class AbstractProfileRepositoryIntegrationTest {
     private ProfileRepository repository;
 
     @Autowired
-    ProfileRepositoryExt profileRepositoryExt;
+    private ProfileRepositoryExt profileRepositoryExt;
 
     @Before
     public void setUp() {

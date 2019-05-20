@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.guava:guava:27.1-jre'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -33,5 +33,5 @@ dependencies {
 }
 
 bootJar {
-	archiveName = 'profiles.jar'
+	archiveFileName = 'profiles.jar'
 }

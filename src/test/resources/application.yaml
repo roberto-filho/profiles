@@ -1,4 +1,6 @@
 server:
+  servlet:
+    context-path: "/api"
   port: 8081
 
 spring:
@@ -12,7 +14,5 @@ spring:
   #      ddl-auto: create
   datasource:
     driver-class-name: org.h2.Driver
-#    url: ${DB_URL}
-    #    url: jdbc:postgresql://localhost:5432/profiles
     username: profiles
     password: profiles
