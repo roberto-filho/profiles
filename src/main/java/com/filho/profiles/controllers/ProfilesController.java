@@ -33,6 +33,7 @@ public class ProfilesController {
             @RequestParam(value = "age", required = false) final String ageRange,
             @RequestParam(value = "height", required = false) final String heightRange,
             @RequestParam(value = "distance", required = false) final String distance,
+            @RequestParam(value = "religion", required = false) final String religion,
             final Pageable pagination) {
 
         ParameterValidator validator = new ParameterValidator();
@@ -53,6 +54,7 @@ public class ProfilesController {
                         ageRange,
                         heightRange,
                         distance,
+                        religion,
                         pagination));
     }
 

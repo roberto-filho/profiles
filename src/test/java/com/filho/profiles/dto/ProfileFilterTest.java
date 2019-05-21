@@ -17,6 +17,7 @@ public class ProfileFilterTest {
                 compatRange,
                 null,
                 null,
+                null,
                 null);
 
         Assertions.assertThat(profileFilter)
@@ -34,6 +35,7 @@ public class ProfileFilterTest {
                 compatRange,
                 null,
                 null,
+                null,
                 null);
 
         Assertions.assertThat(profileFilter)
@@ -49,6 +51,7 @@ public class ProfileFilterTest {
                 null,
                 null,
                 compatRange,
+                null,
                 null,
                 null,
                 null);

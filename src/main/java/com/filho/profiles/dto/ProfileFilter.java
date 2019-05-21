@@ -16,6 +16,7 @@ public class ProfileFilter {
     private Pair<Integer, Integer> heightRange;
     private Pair<Integer, Integer> ageRange;
     private Integer distanceRadiusInKm;
+    private String religion;
 
     /**
      * Creates an object of filters from request parameters.
@@ -34,7 +35,8 @@ public class ProfileFilter {
             String compatibilityScoreRange,
             String ageRange,
             String heightRange,
-            String distance) {
+            String distance,
+            String religion) {
 
         final ProfileFilter.ProfileFilterBuilder builder = builder()
                 .hasPhoto(hasPhoto)
@@ -52,6 +54,9 @@ public class ProfileFilter {
         }
         if (heightRange != null) {
             builder.heightRange(parseRange(heightRange));
+        }
+        if (religion != null) {
+            builder.religion(religion);
         }
 
         return builder.build();

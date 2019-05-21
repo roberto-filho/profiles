@@ -38,6 +38,7 @@ public class ProfileService {
             String ageRange,
             String heightRange,
             String distance,
+            String religion,
             Pageable pagination) {
 
         ProfileFilter filter = ProfileFilter.fromRequestParams(
@@ -47,7 +48,8 @@ public class ProfileService {
                 compatibilityScoreRange,
                 ageRange,
                 heightRange,
-                distance
+                distance,
+                religion
         );
 
         return repositoryExt.findByCriteria(filter, pagination);

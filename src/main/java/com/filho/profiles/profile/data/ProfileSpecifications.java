@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Specifications to use for composing queries to the Profile entity.
@@ -19,7 +20,7 @@ public class ProfileSpecifications {
      * @return
      */
     public static Specification<Profile> isHeightInRange(int minimum, int maximum) {
-        return isInRange("heightInCm", minimum, maximum);
+        return isPropertyInRange("heightInCm", minimum, maximum);
     }
 
     /**
@@ -29,7 +30,7 @@ public class ProfileSpecifications {
      * @return
      */
     public static Specification<Profile> isAgeInRange(int minimum, int maximum) {
-        return isInRange("age", minimum, maximum);
+        return isPropertyInRange("age", minimum, maximum);
     }
 
     /**
@@ -44,16 +45,16 @@ public class ProfileSpecifications {
         final BigDecimal decimalMinimum = toDecimal(minimum);
         final BigDecimal decimalMaximum = toDecimal(maximum);
 
-        return isInRange("compatibilityScore", decimalMinimum.doubleValue(), decimalMaximum.doubleValue());
+        return isPropertyInRange("compatibilityScore", decimalMinimum.doubleValue(), decimalMaximum.doubleValue());
     }
 
     private static BigDecimal toDecimal(int minimum) {
         return BigDecimal.valueOf(minimum)
                 .divide(BigDecimal.valueOf(100))
-                .setScale(2, BigDecimal.ROUND_DOWN);
+                .setScale(2, RoundingMode.DOWN);
     }
 
-    private static Specification<Profile> isInRange(String property, double minimum, double maximum) {
+    private static Specification<Profile> isPropertyInRange(String property, double minimum, double maximum) {
         return (root, query, criteriaBuilder) -> {
             final Path<Number> field = root.get(property);
 
@@ -155,6 +156,21 @@ public class ProfileSpecifications {
             }
 
             return criteriaBuilder.le(distanceInKm, kmRange);
+        };
+    }
+
+    /**
+     * Builds an expression that filters rows by the 'religion' column.
+     * @param religion the religion to match against.
+     * @return the expression.
+     */
+    public static Specification<Profile> filterByReligion(String religion) {
+        return (root, query, criteriaBuilder) -> {
+
+            Expression<String> upperCaseReligion = criteriaBuilder.upper(root.get("religion"));
+            String upperCaseParameter = religion.toUpperCase();
+
+            return criteriaBuilder.equal(upperCaseReligion, upperCaseParameter);
         };
     }
 
