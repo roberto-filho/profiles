@@ -27,6 +27,7 @@ public class ProfileService {
      * @param ageRange                range for filtering by age.
      * @param heightRange             range for filtering by height.
      * @param distance                filters by this distance from the logged in user.
+     * @param jobTitle                the job title for filtering the results.
      * @param pagination              pagination information.
      * @return
      */
@@ -39,6 +40,7 @@ public class ProfileService {
             String heightRange,
             String distance,
             String religion,
+            String jobTitle,
             Pageable pagination) {
 
         ProfileFilter filter = ProfileFilter.fromRequestParams(
@@ -49,7 +51,8 @@ public class ProfileService {
                 ageRange,
                 heightRange,
                 distance,
-                religion
+                religion,
+                jobTitle
         );
 
         return repositoryExt.findByCriteria(filter, pagination);

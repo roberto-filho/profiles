@@ -160,17 +160,30 @@ public class ProfileSpecifications {
     }
 
     /**
-     * Builds an expression that filters rows by the 'religion' column.
+     * Builds an expression that filters rows by the 'religion' column, case insensitive.
      * @param religion the religion to match against.
      * @return the expression.
      */
     public static Specification<Profile> filterByReligion(String religion) {
+        return filterByField("religion", religion);
+    }
+
+    /**
+     * Builds an expression that filters by 'job title', case insensitive.
+     * @param jobTitle the job title
+     * @return
+     */
+    public static Specification<Profile> filterByJobTitle(String jobTitle) {
+        return filterByField("jobTitle", jobTitle);
+    }
+
+    private static Specification<Profile> filterByField(String fieldName, String fieldValue) {
         return (root, query, criteriaBuilder) -> {
 
-            Expression<String> upperCaseReligion = criteriaBuilder.upper(root.get("religion"));
-            String upperCaseParameter = religion.toUpperCase();
+            Expression<String> upperCaseField = criteriaBuilder.upper(root.get(fieldName));
+            String upperCaseParameter = fieldValue.toUpperCase();
 
-            return criteriaBuilder.equal(upperCaseReligion, upperCaseParameter);
+            return criteriaBuilder.equal(upperCaseField, upperCaseParameter);
         };
     }
 

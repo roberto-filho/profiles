@@ -78,6 +78,10 @@ public class ProfileRepositoryExt {
             specs.add(filterByReligion(filter.getReligion()));
         }
 
+        if (isNotBlank(filter.getJobTitle())) {
+            specs.add(filterByJobTitle(filter.getJobTitle()));
+        }
+
         return specs
                 .stream()
                 .reduce(emptySpecification(), Specification::and);

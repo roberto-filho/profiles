@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface ProfileRepository extends PagingAndSortingRepository<Profile, UUID>, JpaSpecificationExecutor {
 
-    @Query(value = "SELECT DISTINCT religion FROM Profile", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT p.religion FROM Profile p")
     List<String> findDistinctReligions();
 
     @Query(value = "SELECT DISTINCT p.jobTitle FROM Profile p")
