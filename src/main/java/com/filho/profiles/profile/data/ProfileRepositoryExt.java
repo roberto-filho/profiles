@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.filho.profiles.profile.data.ProfileSpecifications.*;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Repository
 public class ProfileRepositoryExt {
@@ -71,6 +72,10 @@ public class ProfileRepositoryExt {
                     city.getLat(),
                     city.getLon()
             ));
+        }
+
+        if (isNotBlank(filter.getReligion())) {
+            specs.add(filterByReligion(filter.getReligion()));
         }
 
         return specs

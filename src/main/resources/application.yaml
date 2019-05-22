@@ -12,6 +12,7 @@ spring:
 #    hibernate:
 #      ddl-auto: create
   datasource:
-    url: jdbc:postgresql://localhost:5432/profiles
+    url: ${DB_URL}
+#    url: jdbc:postgresql://localhost:5432/profiles
     username: profiles
     password: profiles
