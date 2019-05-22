@@ -26,4 +26,10 @@ public class FiltersController {
                 .ok(service.findDistinctReligions());
     }
 
+    @GetMapping("/job-title")
+    public ResponseEntity<List<String>> getJobTitles() {
+        return ResponseEntity
+                .ok(service.findDistinctJobTitles());
+    }
+
 }

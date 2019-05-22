@@ -62,4 +62,8 @@ public class ProfileService {
     public List<String> findDistinctReligions() {
         return repository.findDistinctReligions();
     }
+
+    public List<String> findDistinctJobTitles() {
+        return repository.findDistinctJobTitles();
+    }
 }

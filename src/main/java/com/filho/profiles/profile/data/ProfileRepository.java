@@ -12,4 +12,7 @@ public interface ProfileRepository extends PagingAndSortingRepository<Profile, U
 
     @Query(value = "SELECT DISTINCT religion FROM Profile", nativeQuery = true)
     List<String> findDistinctReligions();
+
+    @Query(value = "SELECT DISTINCT p.jobTitle FROM Profile p")
+    List<String> findDistinctJobTitles();
 }

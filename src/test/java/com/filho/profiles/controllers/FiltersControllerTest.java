@@ -47,4 +47,20 @@ public class FiltersControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
+
+    @Test
+    public void shouldReturn3JobTitlesWhen3UniqueJobTitlesInDatabase() throws Exception {
+        Profile accountant = Profile.builder().jobTitle("Accountant").displayName("The accountant guy").build();
+        Profile accountant2 = Profile.builder().jobTitle("Accountant").displayName("The old accountant guy").build();
+        Profile lawyer = Profile.builder().jobTitle("Corporate Lawyer").displayName("The suit and tie guy").build();
+        Profile lawyer2 = Profile.builder().jobTitle("Lawyer").displayName("Regular Lawyer").build();
+        Profile psychologist = Profile.builder().jobTitle("Psychologist").displayName("The suit and tie guy").build();
+
+        repository.saveAll(Arrays.asList(accountant, accountant2, lawyer, lawyer2, psychologist));
+
+        mvc.perform(get("/filters/job-title"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(4)));
+    }
 }
