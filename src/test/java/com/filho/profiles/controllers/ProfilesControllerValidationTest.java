@@ -23,7 +23,7 @@ public class ProfilesControllerValidationTest {
 
     @Test
     public void shouldRespondWithStatus200WhenHeightQueryParamIs150and170() throws Exception {
-        mvc.perform(get(String.format("/api/profiles?height=[150,170]")))
+        mvc.perform(get(String.format("/profiles?height=[150,170]")))
                 .andExpect(status().isOk());
     }
 
@@ -43,7 +43,7 @@ public class ProfilesControllerValidationTest {
     }
 
     private void makeRequestAndCheckStatus(final String paramName, final String paramValue) throws Exception {
-        mvc.perform(get(String.format("/api/profiles?%s=%s", paramName, paramValue)))
+        mvc.perform(get(String.format("/profiles?%s=%s", paramName, paramValue)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.[0].parameter", is(paramName)));
     }
